@@ -3,10 +3,10 @@
 =            Variables            =
 =================================*/
 
-/* main character variabes */
+/* variables principales de los personajes */
 var mario, bricks,clouds,mountains,enemyMushrooms,pipes,platforms,coins;
 
-/* Control variabes */
+/* Variabes de los controles */
 var control={
   up: "UP_ARROW", // 32=spaceBar
   left: 'LEFT_ARROW',
@@ -14,43 +14,43 @@ var control={
   revive: 32
 }
 
-//Inner game status, which might affect game balance or playability.
+//Estado interno del juego, puede afectar el balance del juego o su habilidad para ser jugado.
 var gameConfig={
   
-  // start, playing, over
-  status: "start", 
+  // inicio, jugando, fin
+  status: "Start", 
   
-  // initial lives of mario
+  // Vidas iniciales de mario
   initialLifes: 4,
 
-  // character moves speed
+  // velocidad de movimiento de los personajes 
   moveSpeed: 5,
   enemyMoveSpeed: 1,
 
-  // gravity and jump speed for all the characters
+  // velocidad de gravedad y salto de todos los personajes
   gravity: 1,
   gravityEnemy: 10,
   jump:-15,
 
-  // character starting point
+  // punto de inicio de los personajes
   startingPointX: 500,
   startingPointY: 0,
 
-  // default canvas size
+  // tamaño predeterminado del canvas
   screenX:1240,
   screenY:336,
 
-  // scores
+  // puntuacion
   timeScores: 0,
   scores: 0
 }
 
 
-/*=====  End of Variables  ======*/
+/*=====  Fin de las variables  ======*/
 
 
 /*====================================
-=            Game Status             =
+=         Estado del juego           =
 ====================================*/
 
 function game(){
@@ -68,7 +68,7 @@ function game(){
     fill(255, 255, 255);
     textSize(40);
     textAlign(CENTER);
-    text("Press Any Arrow Keys to Start and Play ", gameConfig.screenX/2, gameConfig.screenY/2);
+    text("Presiona cualquier tecla de flecha para iniciar a jugar", gameConfig.screenX/2, gameConfig.screenY/2);
     textSize(40);
 
     stroke(255);
@@ -85,12 +85,12 @@ function game(){
     scores(mario);
     manualControl(mario);
   
-    // optional control version of game
+    // versión de control opcional del juego
     // autoControl(mario);
   
   }
 
-    // if game is over 
+    // si termina el juego
   if(gameConfig.status==='gameover'){
     fill(0,0,0,150);
     rect(0,0,gameConfig.screenX,gameConfig.screenY);
@@ -98,12 +98,12 @@ function game(){
     fill(255, 255, 255);
     textSize(40);
     textAlign(CENTER);
-    text("GAME OVER", gameConfig.screenX/2, gameConfig.screenY/2+105);
+    text("FIN DEL JUEGO", gameConfig.screenX/2, gameConfig.screenY/2+105);
     textSize(15);
-    text("Press SPACE to Restart", gameConfig.screenX/2, gameConfig.screenY/2+135);
+    text("Presiona la BARRA ESPACIADIORA para reiniciar", gameConfig.screenX/2, gameConfig.screenY/2+135);
     textSize(40);
     text(round(gameConfig.scores),gameConfig.screenX/2,gameConfig.screenY/2-35);
-    text("points",gameConfig.screenX/2,gameConfig.screenY/2);
+    text("Puntuación: ",gameConfig.screenX/2,gameConfig.screenY/2);
 
     stroke(255);
     strokeWeight(7);
@@ -114,7 +114,7 @@ function game(){
 }  
 
 
-// change game status if any key is pressed
+// cambio del estado del juego si se presiona cualquier tecla
 function changeGameStatud(character){
   if((keyDown(control.up) ||keyDown(control.left)||keyDown(control.right) )&& gameConfig.status==="start") {
     initializeCharacterStatus(mario)
@@ -128,14 +128,14 @@ function changeGameStatud(character){
 
 
 
-/*=====  End of Game Status   ======*/
+/*=====  Final del estado del juego   ======*/
 
 
 /*=============================================
-=                 Instialize                  =
+=                   Iniciar                  =
 =============================================*/
 
-//initialize
+//iniciar
 function instializeInSetup(character){
 	frameRate(120);
 	
@@ -149,7 +149,7 @@ function instializeInSetup(character){
 	coins.collide(pipes);
 	coins.displace(bricks);		
 
-  // change the scale of clouds
+  // cambio de la escala de las nubes
 	clouds.forEach(function(element){
 		element.scale=random(1,2);
 	})
@@ -179,13 +179,13 @@ function instializeInDraw(){
     mario.killing=0;
   }
   
-  // make objects not overlap each other.
+  // que los objetos traslapen
   pipes.displace(pipes);
   enemyMushrooms.displace(enemyMushrooms);
   enemyMushrooms.collide(pipes);
   clouds.displace(clouds);
 
-  // make character not overlap other objects
+  // que el personaje no traslape otros objetos
   if(mario.live){
     bricks.displace(mario);
     pipes.displace(mario);
@@ -193,22 +193,22 @@ function instializeInDraw(){
     platforms.displace(mario);
   }
   
-  // character config initialize
+  // iniciar configuración del personaje
   mario["standOnObj"]=false;
   mario.velocity.x=0;
   mario.maxSpeed=20;
 
 }
 
-/*=====       End of Instialize        ======*/
+/*=====       Fin de iniciar        ======*/
 
 
 
 /*============================================
-=            Interactive Elements            =
+=           Elementos interactivos           =
 ============================================*/
 
-// Character get coins
+// Personaje obtiene las monedas
 function getCoins(coin,character){
   if( character.overlap(coin) && character.live && coin.get==false){
     character.coins+=1;
@@ -217,7 +217,7 @@ function getCoins(coin,character){
   };
 }
     
-// Reappear coin after goin is got.
+// moneda reaparece después de que el personaje la obtuvo.
 function coinVanish(coin){
   if(coin.get){
     coin.position.x=random(50,gameConfig.screenX)+gameConfig.screenX;
@@ -225,58 +225,58 @@ function coinVanish(coin){
   };
 }
 
-/*=====  End of Interactive Elements  ======*/
+/*=====  Fin de los elementos interactivos  ======*/
 
 
 /*=============================================
-=    Main character setting and control       =
+=  Configuración y control del personaje principal   =
 =============================================*/
 
-/* Make main character standing on objs */
+/* Que el personaje principal se pare en los objetos */
 function positionOfCharacter(character){
   
-  // Not on the platform
+  // No en la plataforma
   if(character.live){
     
-    // See if standing on bricks
+    // Ver si se para en los ladrillos
     platforms.forEach(function(element){ standOnObjs(character,element); });
     bricks.forEach(function(element){ standOnObjs(character,element); });
     pipes.forEach(function(element){ standOnObjs(character,element); });
     
-    // Character affected by gravity
+    // personaje afectado por la gravedad
     falling(character);
 
-    // If character can only jump if standing on the object
+    // Si el personaje solo puede saltar si está parado en un objeto
     if(character.standOnObj) jumping(character);
       
   }
 
-  // Coins interaction event
+  // Evento interactivo monedas
   coins.forEach(function(element){
     getCoins(element,mario);
     coinVanish(element);
   });
 
-  // EnemyMushrooms interaction event
+  // evento interacción hongos enemigos
   enemyMushrooms.forEach(function(element){
     StepOnEnemy(character,element);
     if((element.touching.left||element.touching.right)&&character.live&&character.killing===0) die(mario);
     
   })
 
-  // Make it stay in the screen
+  // que permanezca en la pantalla
   dontGetOutOfScreen(mario);
 
 }
 
-/* Auto moving character  */
+/* movimiento automático del personaje  */
 function autoControl(character){
     character.velocity.x+=gameConfig.moveSpeed;
     character.changeAnimation('move');
     character.mirrorX(1);
 }
 
-/* Manual control character */
+/* control manual del personaje */
 function manualControl(character){
   
   if(character.live){
@@ -299,7 +299,7 @@ function manualControl(character){
  
 }
 
-/* Movements of character */
+/* movimientos del personaje */
 function jumping(character){
 	if( (keyWentDown(control.up)&&character.live) || (touchIsDown&&character.live) ){
 		character.velocity.y+=gameConfig.jump;
@@ -308,14 +308,14 @@ function jumping(character){
 }
 
 
-/* Movements of character */
+/* Movimientos del personaje */
 function falling(character){
 	character.velocity.y += gameConfig.gravity;
   character.changeAnimation('jump');
 }
 
 
-/* See if  obj1 stand on obj2, mainly for see if standing on the objcs*/
+/* Ver si obj1 se para en obj2, principalmente para ver si parado en los objetos */
 function standOnObjs(obj1,obj2){
   
 	var obj1_Left=leftSide(obj1);
@@ -336,7 +336,7 @@ function standOnObjs(obj1,obj2){
 	}
 }
 
-/* See if  obj1 step on obj2 to kill it*/
+/* Ver si bj1 se para en obj2 para matarlo */
 function StepOnEnemy(obj1,obj2){
   
 	var obj1_Left=leftSide(obj1);
@@ -364,8 +364,8 @@ function StepOnEnemy(obj1,obj2){
 }
 
 
-// make character die if he touched by enemy
-function die(character){
+// que el personaje muera si lo toca un enemigo
+function (character){
     character.live=false;
     character.dying+=120;
     character.liveNumber--;
@@ -374,7 +374,7 @@ function die(character){
     character.velocity.y-=2;
 }
 
-// check character status and response to sprite and game status
+// verificar el estado del personaje y respuesta a sprite y estado del juego
 function checkStatus(character){    
   if(character.live==false){
     character.changeAnimation('dead');
@@ -387,7 +387,7 @@ function checkStatus(character){
 
 }
 
-// revive after dying music finished
+// revivir después de que finalice la música cuando muere
 function reviveAfterMusic(character){
   if( character.live === false && mario.liveNumber !==0 && character.dying===0 ){
     character.live=true;
@@ -399,10 +399,10 @@ function reviveAfterMusic(character){
 }
 
 
-/* Make character stay in screen */
+/* Que el personaje se quede en la pantalla */
 function dontGetOutOfScreen(character){
   
-  //if mario drop in the holes 
+  //Si Mario cae en un hoy
   if(character.position.y>gameConfig.screenY&&character.live && character==mario){
   	die(mario);
   }
@@ -419,7 +419,7 @@ function dontGetOutOfScreen(character){
 
 }
 
-/*=====  End of main character setting and control ======*/
+/*=====  Fin de la configuración y control del personaje principal ======*/
 
 
 /*=============================================
