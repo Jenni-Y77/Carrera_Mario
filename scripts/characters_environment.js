@@ -18,7 +18,7 @@ var control={
 var gameConfig={
   
   // inicio, jugando, fin
-  status: "Start", 
+  status: "start", 
   
   // Vidas iniciales de mario
   initialLifes: 4,
